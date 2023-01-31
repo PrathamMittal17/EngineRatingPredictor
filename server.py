@@ -1,5 +1,5 @@
 import pickle
-from flask import Flask, request
+from flask import Flask, request, jsonify
 
 model = pickle.load(open("rating_model.pkl", "rb"))
 blowback_encoder = pickle.load(open("blowback_encoder.pkl", "rb"))
@@ -27,7 +27,7 @@ def predict():
     gear_shift_value = data['gear']
     fuel = fuel_encoder.transform([data['fuel']])[0]
     odometer = data['odo']
-    return (str(model.predict(
+    return jsonify(int(model.predict(
         [[year, month, battery_value, dipstick_value, engine_oil, engine_value, coolant_value, engine_mounting_value,
           sound_value, smoke_value, compression_value, blowback, clutch_value, gear_shift_value, fuel, odometer]])[0]))
 
